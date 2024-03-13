@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+
+
+        <!--  ########################## BUDGET REQUISITION TABLE ###################################  -->
+        <template id="budget_requisition_table_layout">
+            <table class="table table-bordered table-sm" style="border: 1px solid black;">
+                <thead>
+                    <tr style="border-width: 1px; border-color: black;text-align: center; color:black;">
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            SL No.
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Items
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Remarks
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Unit
+                        </th>
+<!--                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">-->
+<!--                            Budget Qty.-->
+<!--                        </th>-->
+<!--                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;"> -->
+<!--                            Periodic Budget Qty.-->
+<!--                        </th>-->
+<!--                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">-->
+<!--                            Remaining Budget Qty.-->
+<!--                        </th>-->
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Received Qty.
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Qty. in Hand
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Date Required
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="o.prod_serv_requisition_id" t-as="l">
+                        <tr>
+                            <td class="text-center" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-esc="i" />
+                                <t t-set="i" t-value="i+1" />
+                            </td>
+                            <td style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.product_id.name" />
+                            </td>
+                            <td style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.reason" />
+                            </td>
+                            <td style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.product_uom_id.name" />
+                            </td>
+<!--                            <td class="text-right" style="border-width: 1px; border-color: black;">-->
+<!--                                <span style="font-size: 12px;" t-field="l.budget_qty" />-->
+<!--                            </td>-->
+<!--                            <td class="text-right" style="border-width: 1px; border-color: black;">-->
+<!--                                <span style="font-size: 12px;" t-field="l.periodic_budget_qty" />-->
+<!--                            </td>-->
+<!--                            <td class="text-right" style="border-width: 1px; border-color: black;">-->
+<!--                                <span style="font-size: 12px;" t-field="l.rem_budget_qty" />-->
+<!--                            </td>-->
+                            <td class="text-right" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.received_qty" />
+                            </td>
+                            <td class="text-right" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.qty_in_hand"/>
+                            </td>
+                            <td class="text-left" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-esc="o.date_required.strftime('%d/%m/%Y')" />
+                            </td>
+
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </template>
+
+
+
+        <!--  ########################## MASTER REQUISITION TABLE ###################################  -->
+        <template id="master_requisition_table_layout">
+            <table class="table table-bordered table-sm" style="border: 1px solid black;">
+                <thead>
+                    <tr style="border-width: 1px; border-color: black;text-align: center; color:black;">
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            SL No.
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Items
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Remarks
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Unit
+                        </th>
+<!--                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">-->
+<!--                            Total Estimated Qty.-->
+<!--                        </th>-->
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;"> 
+                            Total Qty. Received up to date
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Balance Qty. as on date
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Qty. Required
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Date Required
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="o.prod_serv_requisition_id" t-as="l">
+                        <tr>
+                            <td class="text-center" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-esc="i" />
+                                <t t-set="i" t-value="i+1" />
+                            </td>
+                            <td style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.product_id.name" />
+                            </td>
+                            <td style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.reason" />
+                            </td>
+                            <td style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.product_uom_id.name" />
+                            </td>
+<!--                            <td class="text-right" style="border-width: 1px; border-color: black;">-->
+<!--                                <span style="font-size: 12px;" t-field="l.budget_qty" />-->
+<!--                            </td>-->
+                            <td class="text-right" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.received_qty" />
+                            </td>
+                            <td class="text-right" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.remaining_qty" />
+                            </td>
+                            <td class="text-right" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.product_qty"/>
+                            </td>
+                            <td class="text-left" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-esc="o.date_required.strftime('%d/%m/%Y')" />
+                            </td>
+
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </template>
+
+
+        <!--  ########################## Purchase REQUISITION TABLE ###################################  -->
+        <template id="purchase_requisition_table_layout">
+            <table class="table table-bordered table-sm" style="border: 1px solid black;">
+                <thead>
+                    <tr style="border-width: 1px; border-color: black;text-align: center; color:black;">
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            SL No.
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Items
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Remarks
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Unit
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                           Requesting Qty
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;"> 
+                            Received Qty
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Remaining Qty. 
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Date Required
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="o.prod_serv_requisition_id" t-as="l">
+                        <tr>
+                            <td class="text-center" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-esc="i" />
+                                <t t-set="i" t-value="i+1" />
+                            </td>
+                            <td style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.product_id" />
+                            </td>
+                            <td style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.reason" />
+                            </td>
+                            <td style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.product_uom_id.name" />
+                            </td>
+                            <td class="text-right" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.product_qty" />
+                            </td>
+                            <td class="text-right" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.received_qty" />
+                            </td>
+                            <td class="text-right" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.remaining_qty" />
+                            </td>
+                            <td class="text-left" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-esc="o.date_required.strftime('%d/%m/%Y')" />
+                            </td>
+
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </template>
+
+
+
+        <!--  ########################## INVENTORY  REQUISITION TABLE ###################################  -->
+        <template id="inventory_requisition_table_layout">
+            <table class="table table-bordered table-sm" style="border: 1px solid black;">
+                <thead>
+                    <tr style="border-width: 1px; border-color: black;text-align: center; color:black;">
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            SL No.
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Items
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Remarks
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Unit
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                           Requesting Qty
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;"> 
+                            Received Qty
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Remaining Qty. 
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Date Required
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="o.prod_serv_requisition_id" t-as="l">
+                        <tr>
+                            <td class="text-center" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-esc="i" />
+                                <t t-set="i" t-value="i+1" />
+                            </td>
+                            <td style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.product_id.name" />
+                            </td>
+                            <td style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.reason" />
+                            </td>
+                            <td class="text-right" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.product_qty" />
+                            </td>
+                            <td class="text-right" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.received_qty" />
+                            </td>
+                            <td class="text-right" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.remaining_qty" />
+                            </td>
+                            <td class="text-left" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-esc="o.date_required.strftime('%d/%m/%Y')" />
+                            </td>
+
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </template>
+
+
+                
+                
+        <!--  ########################## MANPOWER  REQUISITION TABLE ###################################  -->
+        <template id="recruit_requisition_table_layout">
+            <table class="table table-bordered table-sm" style="border: 1px solid black;">
+                <thead>
+                    <tr style="border-width: 1px; border-color: black;text-align: center; color:black;">
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            SL No.
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Job
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                           No of Employees
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;"> 
+                            Man Hours
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Deadline
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            No of Available Employees
+                        </th>
+
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Date Required
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="o.manpower_requisition_id" t-as="l">
+                        <tr>
+                            <td class="text-center" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-esc="i" />
+                                <t t-set="i" t-value="i+1" />
+                            </td>
+                            <td style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.job_id.name" />
+                            </td>
+                            <td class="text-right" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.no_of_employees" />
+                            </td>
+                            <td class="text-right" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.hours" />
+                            </td>
+                            <td class="text-left" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.deadline" />
+                            </td>
+                            <td class="text-left" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.available_employee_lpc" />
+                            </td>
+
+                            <td class="text-left" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-esc="o.date_required.strftime('%d/%m/%Y')" />
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </template>
+
+
+
+        <!--  ########################## MONEY  REQUISITION TABLE ###################################  -->
+        <template id="money_requisition_table_layout">
+            <table class="table table-bordered table-sm" style="border: 1px solid black;">
+                <thead>
+                    <tr style="border-width: 1px; border-color: black;text-align: center; color:black;">
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            SL No.
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Expense
+                        </th>
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;"> 
+                            Amount
+                        </th>
+
+                        <th style="border-width: 1px; border-color: black;text-align: center; font-size: 12px;">
+                            Date Required
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="o.money_requisition_id" t-as="l">
+                        <tr>
+                            <td class="text-center" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-esc="i" />
+                                <t t-set="i" t-value="i+1" />
+                            </td>
+                            <td style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.product_id.name" />
+                            </td>
+                            <td class="text-right" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-field="l.amount" />
+                            </td>
+
+                            <td class="text-left" style="border-width: 1px; border-color: black;">
+                                <span style="font-size: 12px;" t-esc="o.date_required.strftime('%d/%m/%Y')" />
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </template>
+
+
+    </data>
+</odoo>

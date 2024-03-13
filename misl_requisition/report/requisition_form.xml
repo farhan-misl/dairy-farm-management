@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+        <template id="report_requisition_form">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="misl_requisition.report_requisition_form_document"/>
+            </t>
+        </template>
+
+        <template id="report_requisition_form_document">
+            <t t-call="web.html_container">
+                <t t-call="misl_requisition.non_web_delivery_external_layout">
+                    <t t-set="i" t-value="1" />
+
+                    <t t-if="o.requisition_type=='use'">
+
+                        <t t-if="o.item_type=='product' or o.item_type=='service'">
+                            <t t-call="misl_requisition.master_requisition_table_layout"></t>
+                        </t>
+
+                        <t t-elif="o.item_type=='manpower'">
+                            <t t-call="misl_requisition.recruit_requisition_table_layout"></t>
+                        </t>
+
+                        <t t-elif="o.item_type=='money'">
+                            <t t-call="misl_requisition.money_requisition_table_layout"></t>
+                        </t>
+
+                    </t>
+
+                    
+                    <t t-if="o.requisition_type=='purchase'">
+                        <t t-call="misl_requisition.purchase_requisition_table_layout"></t>
+                    </t>
+
+
+                    <t t-if="o.requisition_type=='inventory'">
+                        <t t-call="misl_requisition.inventory_requisition_table_layout"></t>
+                    </t>
+
+
+
+                    <t t-if="o.requisition_type=='recruit'">
+                        <t t-call="misl_requisition.recruit_requisition_table_layout"></t>
+                    </t>
+
+
+                    
+                    <t t-if="o.requisition_type=='money'">
+                        <t t-call="misl_requisition.money_requisition_table_layout"></t>
+                    </t>
+
+
+
+                    <div class="row" t-attf-style="font-family: 'Times New Roman'; font-size: 14px; margin-top:150px;">
+
+                        <div class="col-3" style="text-align: center">
+                            <t t-set="creator" t-value="docs.env['hr.employee'].search([('user_id', '=', o.initiator_id.id)])"/>
+<!--                            <t t-if="creator and creator.signature">-->
+<!--                                <img style="float: center;width: 80%;" t-att-src="image_data_uri(creator.signature)"/>-->
+<!--                            </t><br/>-->
+                            <hr style="border-top: 2px solid black;"/>
+                            <div style="text-align: left; font-size: 13px;">
+                                <span>Prepared By:</span><br/>
+                                <span t-esc="creator.name"/><br/>
+                                <t t-if="creator and creator.job_title"><span t-esc="creator.job_title"/><br/></t>
+                                <t t-if="creator and creator.department_id"><span t-esc="creator.department_id.name"/></t><br/>
+                            </div>
+                        </div>
+                        <div class="col-1"></div>
+
+
+                        <div class="col-3" style="text-align: center">
+                            <t t-set="approval_lines" t-value="o.get_approval_history()"/>
+                            <t t-foreach="approval_lines" t-as="line">
+                                <t t-if="line['action']=='approval'">
+<!--                                    <t t-if="line['employee'] and line['employee'].signature">-->
+<!--                                        <img style="float: center;width: 80%;" t-att-src="image_data_uri(line['employee'].signature)"/>-->
+<!--                                    </t><br/>-->
+                                    <hr style="border-top: 2px solid black;"/>
+                                    
+                                    <div style="text-align: left; font-size: 13px;">
+                                        <span>Checked By:</span><br/>
+                                        <span t-esc="line['user'].name"/><br/>
+                                        <t t-if="line['employee'] and line['employee'].job_title"><span t-esc="line['employee'].job_title"/><br/></t>
+                                        <t t-if="line['employee'] and line['employee'].department_id"><span t-esc="line['employee'].department_id.name"/></t><br/>
+                                    </div>
+                                    <br/>
+                                </t>
+                            </t>
+                        </div>
+                        <div class="col-1"></div>
+
+
+
+                        <div class="col-3" style="text-align: center">
+                            <t t-set="approval_lines" t-value="o.get_approval_history()"/>
+                            <t t-foreach="approval_lines" t-as="line">
+                                <t t-if="line['action']=='final_approval'">
+<!--                                    <t t-if="line['employee'] and line['employee'].signature">-->
+<!--                                        <img style="float: center;width: 80%;" t-att-src="image_data_uri(line['employee'].signature)"/>-->
+<!--                                    </t><br/>-->
+                                    <hr style="border-top: 2px solid black;"/>
+                                    <div style="text-align: left; font-size: 13px;">
+                                        <span>Passed By:</span><br/>
+                                        <span t-esc="line['user'].name"/><br/>
+                                        <t t-if="line['employee'] and line['employee'].job_title"><span t-esc="line['employee'].job_title"/><br/></t>
+                                        <t t-if="line['employee'] and line['employee'].department_id"><span t-esc="line['employee'].department_id.name"/></t><br/>
+                                    </div>
+                                </t>
+                            </t>
+                        </div>
+
+                        <div class="col-1"></div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+
+        <template id="non_web_delivery_external_layout">
+            <t t-if="not o" t-set="o" t-value="doc"/>
+
+            <t t-if="not company">
+                <!-- Multicompany -->
+                <t t-if="company_id">
+                    <t t-set="company" t-value="company_id"/>
+                </t>
+                <t t-elif="o and 'company_id' in o and o.company_id.sudo()">
+                    <t t-set="company" t-value="o.company_id.sudo()"/>
+                </t>
+                <t t-else="else">
+                    <t t-set="company" t-value="res_company"/>
+                </t>
+            </t>
+
+            <t t-call="misl_requisition.non_web_delivery_external_layout_standard">
+                <t t-raw="0"/>
+            </t>
+        </template>
+
+        <template id="non_web_delivery_external_layout_standard">
+
+            <!-- support for custom header -->
+            <div t-attf-class="header o_company_#{company.id}_layout">
+                <t t-call="misl_requisition.header_non_web_delivery" t-lang="lang"/>
+            </div>
+
+            <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"
+                 t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
+                 t-att-data-oe-lang="o and o.env.context.get('lang')">
+                <t t-raw="0"/>
+            </div>
+
+        </template>
+
+        <template id="header_non_web_delivery">
+            <header t-attf-style="font-family: 'Times New Roman';">
+                <div class="row d-flex" style="width: 100%;">
+                    <span class="col-3">
+                        <img style="text-align: left;" t-att-src="image_data_uri(o.company_id.logo)"/>
+                    </span>
+                    <span class="col 9" >
+                        <div t-attf-style="text-align: center; font-weight:bold; font-size: 35px;">
+                                <t t-esc="o.company_id.name" />
+                        </div>
+                        <div t-attf-class="mb-0" style="text-align: center; font-size: 20px;">
+                            <t t-if="o.company_id.street">
+                                <span t-attf-style="font-weight:bold;">HEAD OFFICE:</span>
+                                <span t-esc="o.company_id.street"/>
+                            </t>
+                            <t t-if="o.company_id.street2">
+                                ,
+                                <span t-esc="o.company_id.street2"/>
+                            </t>
+                            <t t-if="o.company_id.city">
+                                ,
+                                <span t-esc="o.company_id.city"/>
+                            </t>
+                            <t t-if="o.company_id.state_id">
+                                ,
+                                <span t-esc="o.company_id.state_id.name"/>
+                            </t>
+                            <t t-if="o.company_id.zip">
+                                ,
+                                <span t-esc="o.company_id.zip"/>
+                            </t>
+                            <t t-if="o.company_id.country_id">
+                                ,
+                                <span t-esc="o.company_id.country_id.name"/>
+                            </t>                                                          
+                        </div>
+                        <div style="text-align: center; font-size: 20px;">
+                            <span>Phone No:</span>
+                            <span t-if="o.company_id.phone" t-esc="o.company_id.phone"/>
+                            <t t-if="o.company_id.mobile">,
+                                <span t-esc="o.company_id.mobile"/>
+                            </t> 
+                            <span style="padding-left:5px">Email :</span>
+                            <span t-if="o.company_id.email" t-esc="o.company_id.email"/>
+                        </div>
+
+                        <div style="text-align: center; font-size: 25px; font-weight:bold; margin-top: 10px;">
+
+
+                            <t t-if="o.requisition_type=='use'">
+                               MASTER REQUISITION SLIP
+                            </t>
+
+                            <t t-if="o.requisition_type=='purchase'">
+                                PURCHASE REQUISITION SLIP
+                            </t>
+
+
+                            <t t-if="o.requisition_type=='inventory'">
+                               INVENTORY REQUISITION SLIP
+                            </t>
+
+
+
+                            <t t-if="o.requisition_type=='recruit'">
+                                MANPOWER REQUISITION SLIP
+                            </t>
+
+
+                            
+                            <t t-if="o.requisition_type=='money'">
+                                MONEY REQUISITION SLIP
+                            </t>
+
+                        </div>
+                    </span>
+                </div>
+                
+                <div>
+                    <div class="row" style="padding-top: 15px;font-size: 20px;">
+                            <div class="col-9">
+                                <span style="padding-left: 7px; font-weight:bold;">No:</span>
+                                <t t-if="o.name">
+                                    <span style="padding-left: 4px; font-weight:bold;" t-esc="o.name"/>
+                                </t>
+                            </div>
+                            <div class="col" style="padding-left: 40px">
+                                <t t-if="o.requisition_date">
+                                    <span style="font-weight:bold;">Date:</span>
+                                        <span style="padding-left: 4px; font-weight:bold;" t-esc="o.requisition_date.strftime('%d/%m/%Y')"/>
+                                </t>
+                            </div>
+                    </div>
+
+<!--                    <div class="row" style="padding-top: 15px;font-size: 20px;">-->
+<!--                        <t t-if="o.requester_operating_unit">-->
+<!--                            <div class="col-9">-->
+<!--                                <span style="padding-left: 7px; font-weight:bold;">Project Name:</span>-->
+<!--                                    <span style="padding-left: 4px; font-weight:bold;" t-esc="o.requester_operating_unit.name"/>-->
+<!--                            </div>-->
+<!--                        </t>-->
+<!--                        <div class="col" style="padding-left: 60px">-->
+<!--                            <t t-if="o.requester_operating_unit.street">-->
+<!--                                <span style="font-weight:bold;">Location:</span>-->
+<!--                                    <span style="padding-left: 4px; font-weight:bold;" t-esc="o.requester_operating_unit.street"/>-->
+<!--                            </t>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                 </div>              
+            </header>
+        </template>
+    </data>
+</odoo>

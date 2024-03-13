@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+    <data>
+
+
+                                               <!--              Manpower Requisition View               -->
+
+
+        <record id="manpower_requisition_line_form" model="ir.ui.view">
+            <field name="name">manpower.requisition.line.form</field>
+            <field name="model">requisition.manpower</field>
+            <field name="arch" type="xml">
+                <form string="Requisition Form" create="0" edit="0" delete="0">
+                
+                    <!-- <header>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,approve,hr_approve,issue,receive" />
+                    </header> -->
+
+                    <sheet>
+                        <group>
+                            <group>         
+                                <field name="requisition_id" options="{'no_create_edit': True, 'no_open': True, 'no_create':True}" invisible='1' />
+                             
+                                <field name="job_id" width="40"/>
+                                <field name="no_of_employees" width="30"/>
+                                <field name="deadline" width="30"/>
+                                <field name="reason" width="40"/>
+                       
+                            </group>
+                           
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="manpower_requisition_line_tree" model="ir.ui.view">
+            <field name="name">manpower.requisition.line.tree</field>
+            <field name="model">requisition.manpower</field>
+            <field name="arch" type="xml">
+                <tree string="Requisition Line Tree" create="0" edit="0" delete="0">
+                    <field name="requisition_id" invisible='1'/>
+                    <field name="job_id" width="20"/>
+                    <field name="no_of_employees" width="30"/>
+                    <field name="deadline" width="30"/>
+                    <field name="reason" width="40"/>
+                    <field name="requisition_type" invisible='1'/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_manpower_requisition_line">
+            <field name="name">Requisition Lines</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">requisition.manpower</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="manpower_requisition_line_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                </p>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

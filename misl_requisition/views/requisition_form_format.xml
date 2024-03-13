@@ -1,0 +1,32 @@
+<odoo>
+    <data>
+        <record id="paperformat_requisition_form" model="report.paperformat">
+            <field name="name">Requisition</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">297</field>
+            <field name="page_width">210</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">73</field>
+            <field name="margin_bottom">40</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">50</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="report_requisition" model="ir.actions.report">
+            <field name="name">Requisition</field>
+            <field name="model">requisition.master</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">misl_requisition.report_requisition_form</field>
+            <field name="report_file">misl_requisition.report_requisition_form</field>
+            <field name="print_report_name">'Rquisition'</field>
+            <field name="binding_model_id" ref="misl_requisition.model_requisition_master"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="misl_requisition.paperformat_requisition_form"/>
+            <field name="print_report_name">'Requisition-%s' % (object.name if object.name else '')</field>
+        </record>
+    </data>     
+</odoo>

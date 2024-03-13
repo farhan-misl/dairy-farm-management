@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="purchase_requisition_form_inherit" model="ir.ui.view">
+            <field name="name">inherit.purchase_requisition.form</field>
+            <field name="model">purchase.requisition</field>
+            <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="custom_requisition_id" options="{'no_create_edit': True, 'no_create':True}"
+                           domain="[('requisition_type', '=', 'purchase'), ('state', '=', 'approved')]" force_save="1" readonly="1"
+                        />
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,54 @@
+<odoo>
+  <data>
+
+    <record id="requisition_approval_config_view_form" model="ir.ui.view">
+      <field name="name">approval.config.view.form</field>
+      <field name="model">approval.config</field>
+      <field name="inherit_id" ref="misl_approval.approval_config_view_form" />
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='final_stage']" position="after">
+          <field
+            name="self_approval"
+            attrs="{'invisible': [('approval_module', '!=', 'misl_requisition')]}"
+          />
+          <field
+            name="create_po"
+            attrs="{'invisible': [('approval_type', '!=', 'purchase')]}"
+          />
+          <field
+            name="create_agreement"
+            attrs="{'invisible': [('approval_type', '!=', 'purchase')]}"
+          />
+          <field
+            name="create_internal_transfer"
+            attrs="{'invisible': [('approval_type', '!=', 'inventory')]}"
+          />
+          <field
+            name="create_employee_transfer"
+            attrs="{'invisible': [('approval_type', '!=', 'recruit')]}"
+          />
+          <field
+            name="process_recruitment"
+            attrs="{'invisible': [('approval_type', '!=', 'recruit')]}"
+          />
+
+          <field
+            name="approve_money"
+            attrs="{'invisible': [('approval_type', 'not in', ('money', 'use'))]}"
+          />
+        </xpath>
+      </field>
+    </record>
+
+    <record id="action_approval_config" model="ir.actions.act_window">
+      <field name="name">Approval Configuration</field>
+      <field name="res_model">approval.config</field>
+      <field name="view_mode">tree,kanban,form</field>
+      <field
+        name="context"
+      >{'default_approval_module': 'misl_requisition'}</field>
+      <field name="domain">[('approval_module','=', 'misl_requisition')]</field>
+    </record>
+
+  </data>
+</odoo>

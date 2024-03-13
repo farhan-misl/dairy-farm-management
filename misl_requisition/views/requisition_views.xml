@@ -1,0 +1,760 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record model="ir.actions.act_window" id="action_requisition_agreement">
+            <field name="name">Purchase Agreement</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.requisition</field>
+            <field name="view_mode">form,tree</field>
+            <field name="domain">[('custom_requisition_id','=',active_id)]</field>
+            <field name="context">{
+                "default_custom_requisition_id":active_id,
+                "default_user_id": uid,
+                }
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_purchase_agreements_list">
+            <field name="name">Purchase Agreements</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.requisition</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('custom_requisition_id','=',active_id)]</field>
+            <field name="context">{
+                "default_custom_requisition_id":active_id,
+                "default_user_id": uid,
+                }
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_po_list">
+            <field name="name">Purchase Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('custom_requisition_id','=',active_id)]</field>
+            <field name="context">{
+                "default_custom_requisition_id":active_id,
+                "default_user_id": uid,
+                }
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_po">
+            <field name="name">Purchase Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">form,tree</field>
+            <field name="domain">[('custom_requisition_id','=',active_id)]</field>
+            <field name="context">{
+                "default_custom_requisition_id":active_id,
+                "default_user_id": uid,
+                }
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_internal_transfer">
+            <field name="name">Stock Picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_mode">form,tree</field>
+            <field name="domain">[('custom_requisition_id','=',active_id)]</field>
+            <field name="context">{
+                "default_custom_requisition_id":active_id,
+                "default_user_id": uid,
+                "default_is_internal": True,
+                "is_internal": True
+                }
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_internal_transfer_list">
+            <field name="name">Stock Picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('custom_requisition_id','=',active_id)]</field>
+            <field name="context">{
+                "default_custom_requisition_id":active_id,
+                "default_user_id": uid,
+                "is_internal": True
+                }
+            </field>
+        </record>
+
+        <record id="requisition_kanban_view" model="ir.ui.view">
+            <field name="name">requisition.kanban.view</field>
+            <field name="model">requisition.master</field>
+            <field name="arch" type="xml">
+                <kanban class="oe_background_grey o_kanban_dashboard o_shift_kanban" string="Shift exchanges">
+                    <field name="color"/>
+                    <field name="state"/>
+                    <field name="employee_id"/>
+                    <field name="requisition_type" string="Requisition Type"/>
+                    <field name="requester_department_id"/>
+                    <field name="requisition_date"/>
+                    <field name="date_required"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click mb-3">
+
+                                <div t-if="record.state.value == 'Draft'" t-attf-class="ribbon ribbon-top-right">
+                                    <span t-attf-class="ribbon-{{ record.state.raw_value }}">
+                                        <t t-esc="record.state.raw_value"/>
+                                    </span>
+                                </div>
+                                <div t-if="record.state.value == 'Approval Pending'"
+                                     t-attf-class="ribbon ribbon-top-right">
+                                    <span t-attf-class="ribbon-{{ record.state.raw_value }}">
+                                        <t t-esc="record.state.raw_value"/>
+                                    </span>
+                                </div>
+                                <div t-if="record.state.value == 'Approved'" t-attf-class="ribbon ribbon-top-right">
+                                    <span t-attf-class="ribbon-{{ record.state.raw_value }}">
+                                        <t t-esc="record.state.raw_value"/>
+                                    </span>
+                                </div>
+                                <div t-if="record.state.value == 'Cancelled'" t-attf-class="ribbon ribbon-top-right">
+                                    <span t-attf-class="ribbon-{{ record.state.raw_value }}">
+                                        <t t-esc="record.state.raw_value"/>
+                                    </span>
+                                </div>
+                                <div t-if="record.state.value == 'Closed'" t-attf-class="ribbon ribbon-top-right">
+                                    <span t-attf-class="ribbon-{{ record.state.raw_value }}">
+                                        <t t-esc="record.state.raw_value"/>
+                                    </span>
+                                </div>
+
+                                <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                    <div class="o_kanban_record_top mb8">
+                                        <div
+                                                class="o_kanban_record_headings ml-1 mt-3 mb-2 text-left"
+                                        >
+                                            <strong>
+                                                <field name="name"/>
+                                            </strong>
+                                        </div>
+                                    </div>
+
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_left" title="Requisitioner">
+                                            <span t-if="record.employee_id">
+                                                <i class="fa fa-user mr-2" title="Employee"/>
+                                                <span class="mt-2">
+                                                    <field name="employee_id"/>
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div class="oe_kanban_bottom_right" title="Requisition Type">
+                                            <t t-if="record.requisition_type">
+                                                <i class="fa fa-bars mr-2 text-success" title="Requisition Type"/>
+                                                <span>
+                                                    <field name="requisition_type"/>
+                                                </span>
+                                                (
+                                                <span>
+                                                    <field name="method"/>
+                                                </span>
+                                                )
+                                            </t>
+                                        </div>
+                                    </div>
+                                    <div class="w-100"/>
+
+                                    <div class="o_kanban_record_bottom">
+                                        <!--                                        <div class="oe_kanban_bottom_left">-->
+                                        <!--                                            <t t-if="record.requester_operating_unit.value">-->
+                                        <!--                                                <i class="fa fa-map-marker" title="Operating Unit"/>-->
+                                        <!--                                                <span class="mt-2" title="Operating Unit">-->
+                                        <!--                                                    <field name="requester_operating_unit"/>-->
+                                        <!--                                                </span>-->
+                                        <!--                                            </t>-->
+                                        <!--                                        </div>-->
+
+                                        <div class="oe_kanban_bottom_right" title="Item">
+                                            <t t-if="record.item_type">
+                                                <i
+                                                        class="fa fa-file-text mt-2 mr-2"
+                                                        title="Item"
+                                                />
+                                                <span class="mt-2">
+                                                    <field name="item_type"/>
+                                                </span>
+                                            </t>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_left">
+                                            <t t-if="record.requester_department_id.value">
+                                                <i class="fa fa-building-o" title="Department"/>
+                                                <span class="mt-2" title="Department">
+                                                    <field name="requester_department_id"/>
+                                                </span>
+                                            </t>
+                                        </div>
+                                        <div class="oe_kanban_bottom_right" title="Requisition Date">
+                                            <t t-if="record.date_required">
+                                                <i
+                                                        class="fa fa-calendar-times-o mr-2 text-danger"
+                                                        title="Date Required"
+                                                />
+                                                <span class="mt-2">
+                                                    <field name="date_required"/>
+                                                </span>
+                                            </t>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_left">
+                                            <t t-if="record.company_id.value">
+                                                <i class="fa fas fa-building" title="Company"/>
+                                                <span class="mt-2" title="Company">
+                                                    <field name="company_id"/>
+                                                </span>
+                                            </t>
+                                        </div>
+                                        <div class="oe_kanban_bottom_right" title="Requisition Date">
+                                            <t t-if="record.requisition_date">
+                                                <i
+                                                        class="fa fa-calendar-check-o mr-2"
+                                                        title="Requisition Date"
+                                                />
+                                                <span class="mt-2">
+                                                    <field name="requisition_date"/>
+                                                </span>
+                                            </t>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="requisition_master_form" model="ir.ui.view">
+            <field name="name">requisition.master.form</field>
+            <field name="model">requisition.master</field>
+            <field name="arch" type="xml">
+                <form string="Requisition Form">
+
+                    <header>
+                        <field name="create_po" invisible="1"/>
+                        <field name="create_agreement" invisible="1"/>
+                        <field name="create_internal_transfer" invisible="1"/>
+                        <field name="user_can_approve" invisible="1"/>
+                        <field name="is_final" invisible="1"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,approved,closed"/>
+                        <field name="stage_id"
+                               widget="statusbar"
+                               domain="[('approval_type', '=', requisition_type)]"/>
+                        <button string="Confirm"
+                                states='draft'
+                                name="confirm"
+                                type="object"
+                                class="oe_highlight"/>
+                        <button string="Approve"
+                                attrs="{'invisible': ['|', ('state', '!=', 'confirmed'), ('user_can_approve', '=', False)]}"
+                                name="approve"
+                                type="object"
+                                class="oe_highlight"/>
+                        <button string="Cancel" class="btn-danger"
+                                attrs="{'invisible': ['|', '|', ('state', 'in', ('draft', 'cancel')), ('user_can_approve', '=', False), ('is_final', '=', True)]}"
+                                name="action_cancel"
+                                type="object"
+                                confirm="Are you sure you want to cancel this requisition?"
+                        />
+                        <button string="Set To Draft"
+                                attrs="{'invisible': ['|', '|', ('state', '!=', 'cancel'), ('user_can_approve', '=', False), ('is_final', '=', True)]}"
+                                name="action_draft"
+                                type="object"/>
+                        <button name="%(action_requisition_agreement)d"
+                                type="action"
+                                string="New Agreement"
+                                attrs="{'invisible': ['|', '|',  '|', ('requisition_type', '!=', 'purchase'), ('create_agreement', '=', False), ('is_fully_received', '=', True), ('state', '=', 'closed')]}"
+                                class="oe_highlight" groups="purchase.group_purchase_user"/>
+                        <button name="%(action_po)d"
+                                type="action"
+                                string="New Order"
+                                attrs="{'invisible': ['|', '|', '|',('requisition_type', '!=', 'purchase'), ('create_po', '=', False), ('is_fully_received', '=', True), ('state', '=', 'closed')]}"
+                                class="oe_highlight" groups="purchase.group_purchase_user"/>
+                        <button name="%(action_internal_transfer)d"
+                                type="action"
+                                string="Create Transfer"
+                                attrs="{'invisible': ['|', '|', '|',('requisition_type', '!=', 'inventory'), ('create_internal_transfer', '=', False), ('is_fully_received', '=', True), ('state', '=', 'closed')]}"
+                                class="oe_highlight"/>
+                        <button string="Close"
+                                attrs="{'invisible': ['|', ('state', '!=', 'approved'), ('requisition_type', 'not in', ('use', 'inventory', 'purchase'))]}"
+                                name="action_close"
+                                type="object"
+                                class="oe_highlight" groups="misl_requisition.misl_requisition_admin"/>
+
+                    </header>
+
+                    <sheet>
+
+                        <div class="oe_button_box" name="button_box">
+                            <button name="%(action_purchase_agreements_list)d"
+                                    type="action"
+                                    class="oe_stat_button"
+                                    icon="fa-list-alt" groups="purchase.group_purchase_user"
+                                    attrs="{'invisible': ['|', ('agreement_count', '=', 0), ('requisition_type', '!=', 'purchase')]}">
+                                <field name="agreement_count"
+                                       widget="statinfo"
+                                       string="Agreements"/>
+                            </button>
+                            <button name="%(action_po_list)d"
+                                    type="action"
+                                    class="oe_stat_button"
+                                    icon="fa-list-alt" groups="purchase.group_purchase_user"
+                                    attrs="{'invisible': ['|', ('po_count', '=', 0), ('requisition_type', '!=', 'purchase')]}">
+                                <field name="po_count"
+                                       widget="statinfo"
+                                       string="RFQs/Orders"/>
+                            </button>
+
+                            <button name="%(action_internal_transfer_list)d"
+                                    type="action"
+                                    class="oe_stat_button"
+                                    icon="fa-list-alt" groups="stock.group_stock_user"
+                                    attrs="{'invisible': ['|', ('transfer_count', '=', 0),('requisition_type', 'not in', ('inventory', 'consume'))]}">
+                                <field name="transfer_count" widget="statinfo" string="Transfers"/>
+                            </button>
+
+                        </div>
+
+                        <div class="pull-left">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" readonly="1" force_save="1"/>
+                            </h1>
+                        </div>
+
+
+                        <group>
+
+                            <group string="Requester Information">
+                                <field name="initiator_id" readonly="1"
+                                       options="{'no_create_edit': True, 'no_open': True, 'no_create':True} "/>
+                                <field name="employee_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="company_id"
+                                       options="{'no_create_edit': True, 'no_open': True, 'no_create':True} "/>
+                                <field name="department_id"
+                                       options="{'no_create_edit': True, 'no_open': True, 'no_create':True} "/>
+                                <field name="is_fully_received" invisible="1"/>
+
+                            </group>
+
+                            <group string="Requesting For">
+                                <field name="requisition_type" readonly="1"
+                                       force_save="1" string="Requisition Type"/>
+                                <field name="master_requisition_domain_ids" invisible="1"/>
+                                <field name="master_requisition" options="{'no_create_edit': True, 'no_create':True}"
+                                       attrs="{'readonly': [('state', 'in', ('approved', 'cancel', 'closed'))], 'invisible': [('requisition_type', '=', 'use')]}"
+                                       context="{'search_view_ref': 'misl_requisition.requisition_master_search'}"
+                                       domain="[('id', 'in', master_requisition_domain_ids)]"/>
+                                <field name="item_type" force_save="1"
+                                       attrs="{'readonly': ['|', '|', ('state', 'in', ('approved', 'cancel', 'closed')), ('requisition_type', '=', 'inventory'), ('master_requisition', '!=', False)]}"/>
+                                <field name="requester_department_id"
+                                       options="{'no_create_edit': True, 'no_open': True, 'no_create':True}"
+                                       attrs="{'readonly': ['|', ('state', 'in', ('approved', 'cancel', 'closed')), ('master_requisition', '!=', False)]}"/>
+
+                                <field name="warehouse_src_id"
+                                       options="{'no_create_edit': True, 'no_open': True, 'no_create':True} "
+                                       attrs="{'readonly': [('state', 'in', ('approved', 'cancel', 'closed'))], 'required': [('item_type', '=', 'product'), ('requisition_type', '=', 'inventory')], 'invisible': ['|', ('item_type', '!=', 'product'), ('requisition_type', '!=', 'inventory')]}"/>
+                                <div class="o_td_label">
+                                    <label for="warehouse_id" string="Destination Warehouse"
+                                           attrs="{'invisible': [('requisition_type','!=','inventory')]}"/>
+                                    <label for="warehouse_id" string="Warehouse"
+                                           attrs="{'invisible': [('requisition_type','=','inventory')]}"/>
+                                </div>
+                                <field name="warehouse_id" nolabel="1"
+                                       attrs="{'readonly': [('state', 'in', ('approved', 'cancel', 'closed'))], 'required': [('item_type', '=', 'product')], 'invisible': [('item_type', '!=', 'product')]}"
+                                       options="{'no_create_edit': True, 'no_open': True, 'no_create':True} "/>
+                            </group>
+
+                        </group>
+
+                        <group>
+                            <group name="other" string="Other Information">
+                                <field name="method"
+                                       attrs="{'readonly': [('state', 'in', ('approved', 'cancel', 'closed'))]}"/>
+                                <field name="source_type"
+                                       attrs="{'readonly': [('state', 'in', ('approved', 'cancel', 'closed'))]}"/>
+                                <!--                                <field name="budget_requisition_id"-->
+                                <!--                                       attrs="{'invisible': [('source_type', '!=', 'budget')], 'readonly': [('state', 'in', ('approved', 'cancel', 'closed'))]}"/>-->
+
+                                <field name="receiving_status"
+                                       attrs="{'invisible': ['|', ('item_type', '!=', 'product'),('state', 'not in', ('approved', 'closed'))]}"/>
+                                <!--                                <field name="agreement_id" attrs="{'invisible': [('requisition_type', '!=', 'purchase')]}"/>-->
+                                <div class="o_td_label">
+                                    <label for="description" string="Description"
+                                           attrs="{'invisible': [('source_type','=','none')]}"/>
+                                    <label for="description" string="Reason"
+                                           attrs="{'invisible': [('source_type','!=','none')]}"/>
+                                </div>
+
+                                <field name="description" nolabel="1"
+                                       attrs="{'required': [('source_type','=','none'), ('master_requisition', '=', False)], 'readonly': [('state', 'in', ('approved', 'cancel', 'closed'))]}"/>
+                            </group>
+
+                            <group name="date" string="Date Information">
+                                <field name="requisition_date" required="1" readonly="1"/>
+                                <field name="date_required" required="1"
+                                       attrs="{'readonly': [('state', 'in', ('approved', 'cancel', 'closed'))]}"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page id="requi_tab_product" string="Product Details"
+                                  attrs="{'invisible': ['|',('item_type','=', False),('item_type', 'not in', ('product','service'))]}">
+                                <field name="prod_serv_requisition_id"
+                                       attrs="{'readonly': [('state', 'in', ('approved', 'cancel', 'closed'))]}">
+
+                                    <tree string="Requisition Lines" editable="bottom">
+                                        <field name="requisition_type" invisible='1' string="Requisition Type"/>
+                                        <field name="product_domain_ids" invisible="1"/>
+                                        <field name="product_id" width="30"
+                                               attrs="{'readonly': ['|', ('parent.state', '=', 'approved'), ('parent.master_requisition', '!=', False)]}"
+                                               context="{'show_attribute': True}" force_save="1"
+                                               domain="[('id', 'in', product_domain_ids)]"/>
+                                        <field name="default_code" width="30"/>
+                                        <field name="product_uom_id"
+                                               options="{'no_create_edit': True, 'no_open': True, 'no_create':True}"
+                                               width="20"
+                                               attrs="{'readonly': ['|', ('parent.state', '=', 'approved'), ('parent.master_requisition', '!=', False)]}"
+                                               force_save="1"/>
+                                        <field name="product_qty" width="35" string="Requesting Qty"
+                                               attrs="{'readonly': [('parent.state', '=', 'approved')]}"/>
+
+                                        <field name="received_qty" width="30"
+                                               string="Received Qty" readonly="1"/>
+                                        <field name="remaining_qty" string="Remaining Qty" width="35"
+                                               force_save="1" readonly="1"/>
+
+                                        <field name="reason" string="Remarks" width="40"/>
+
+                                        <field name="master_requisition_line_id" invisible="1"/>
+                                        <button name="action_open_quants"
+                                                type="object"
+                                                string="Check Availability"
+                                                attrs="{'column_invisible': ['|', '|', ('parent.state', 'not in', ('approved', 'draft', 'confirmed')), ('parent.requisition_type', 'not in', ('use', 'inventory')), ('parent.item_type', '!=', 'product')]}"
+                                                class="oe_highlight" groups="stock.group_stock_manager" width="40"/>
+                                    </tree>
+
+                                </field>
+                            </page>
+
+                            <page id="approval_tab" string="Approval History">
+                                <field name="approval_history_ids">
+                                    <tree string="Approval History">
+                                        <field name="date" width="40"/>
+                                        <field name="user_id" width="30"/>
+                                        <field name="from_stage" width="30"/>
+                                        <field name="to_stage" width="40"/>
+                                        <field name="action_type" width="40"/>
+                                    </tree>
+
+                                </field>
+                            </page>
+
+
+                        </notebook>
+
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field
+                                name="message_follower_ids"
+                                widget="mail_followers"
+                        />
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+        <record id="requisition_master_tree" model="ir.ui.view">
+            <field name="name">requisition.master.tree</field>
+            <field name="model">requisition.master</field>
+            <field name="arch" type="xml">
+                <tree string="Requisition Tree">
+                    <field name="name"/>
+                    <field name="requisition_type" string="Requisition Type"/>
+                    <field name="method" optional="hide"/>
+                    <field name="employee_id"/>
+                    <field name="requisition_date"/>
+                    <field name="company_id"/>
+                    <field name="stage_id"/>
+                    <field name="state"/>
+                    <field name="receiving_status" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="requisition_master_tree_only_master" model="ir.ui.view">
+            <field name="name">requisition.master.tree.only.master</field>
+            <field name="model">requisition.master</field>
+            <field name="arch" type="xml">
+                <tree string="Requisition Tree">
+                    <field name="name"/>
+                    <field name="requisition_type" string="Requisition Type"/>
+                    <field name="method" optional="hide"/>
+                    <field name="item_type"/>
+                    <field name="employee_id"/>
+                    <field name="requisition_date"/>
+                    <field name="company_id"/>
+                    <field name="stage_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="requisition_master_tree_only_inventory" model="ir.ui.view">
+            <field name="name">requisition.master.tree.only.inventory</field>
+            <field name="model">requisition.master</field>
+            <field name="arch" type="xml">
+                <tree string="Requisition Tree">
+                    <field name="name"/>
+                    <field name="requisition_type" string="Requisition Type"/>
+                    <field name="method" optional="hide"/>
+                    <field name="item_type"/>
+                    <field name="employee_id"/>
+                    <field name="requisition_date"/>
+                    <field name="company_id"/>
+                    <field name="stage_id"/>
+                    <field name="state"/>
+                    <field name="warehouse_src_id"/>
+                    <field name="warehouse_id" string="Destination Warehouse"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="requisition_master_search" model="ir.ui.view">
+            <field name="name">requisition.master.search</field>
+            <field name="model">requisition.master</field>
+            <field name="arch" type="xml">
+                <search string="Search Requisition">
+
+                    <field name="name" string="Requisition" filter_domain="[('name','ilike', self)]"/>
+                    <field name="employee_id"/>
+                    <field name="company_id"/>
+                    <field name="prod_serv_requisition_id" string="Product"
+                           filter_domain="[('prod_serv_requisition_id.product_id', 'ilike', self)]"/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Waiting For Approval" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                    <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                    <filter string="Closed" name="closed" domain="[('state', '=', 'closed')]"/>
+                    <filter string="Cancelled" name="cancel" domain="[('state', '=', 'cancel')]"/>
+
+                    <group expand="0" string="Group By">
+                        <filter name="employee_id" string="Requisitioner" domain="[]"
+                                context="{'group_by':'employee_id'}"/>
+                        <filter name="company_id" string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                        <filter name="requisition_date" string="Requisition Date" domain="[]"
+                                context="{'group_by':'requisition_date'}"/>
+                        <filter name="state" string="State" domain="[]"
+                                context="{'group_by':'state'}"/>
+                    </group>
+
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_requisition_master">
+            <field name="name">Requisition</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">requisition.master</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="search_view_id" ref="requisition_master_search"/>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Start a new Requisition Procedure
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_requisition_master_type">
+            <field name="name">Master Requisition</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">requisition.master</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="search_view_id" ref="requisition_master_search"/>
+            <field name="view_ids"
+                   eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'tree', 'view_id': ref('requisition_master_tree_only_master')}),
+                          (0, 0, {'view_mode': 'kanban', 'view_id': ref('requisition_kanban_view')})
+                          ]"/>
+            <field name="domain">[('requisition_type', '=', 'use')]</field>
+            <field name="context">
+                {'default_requisition_type': 'use',
+                'search_default_draft': 1,
+                'search_default_confirmed': 1,
+                'search_default_approved': 1}
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_requisition_purchase_list_menu_action">
+            <field name="name">Purchase Requisition</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">requisition.master</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="search_view_id" ref="requisition_master_search"/>
+            <field name="domain">[('requisition_type', '=', 'purchase')]</field>
+            <field name="context">
+                {'default_requisition_type': 'purchase',
+                'search_default_draft': 1,
+                'search_default_confirmed': 1,
+                'search_default_approved': 1}
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_requisition_inventory_list_menu_action">
+            <field name="name">Inventory Requisition</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">requisition.master</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="search_view_id" ref="requisition_master_search"/>
+            <field name="view_ids"
+                   eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'tree', 'view_id': ref('requisition_master_tree_only_inventory')}),
+                          (0, 0, {'view_mode': 'kanban', 'view_id': ref('misl_requisition.requisition_kanban_view')})
+                          ]"/>
+            <field name="domain">[('requisition_type', '=', 'inventory')]</field>
+            <field name="context">
+                {'default_requisition_type': 'inventory',
+                'search_default_draft': 1,
+                'search_default_confirmed': 1,
+                'search_default_approved': 1}
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_requisition_purchase_list">
+            <field name="name">Purchase Requisition</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">requisition.master</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="requisition_master_search"/>
+            <field name="domain">[('master_requisition', '=', active_id), ('requisition_type', '=', 'purchase')]</field>
+            <field name="context">{
+                "default_master_requisition":active_id,
+                "default_user_id": uid,
+                }
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_requisition_inventory_list">
+            <field name="name">Inventory Requisition</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">requisition.master</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="requisition_master_search"/>
+            <field name="domain">[('master_requisition', '=', active_id), ('requisition_type', '=', 'inventory')]
+            </field>
+            <field name="context">{
+                "default_master_requisition":active_id,
+                "default_user_id": uid,
+                }
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_requisition_master_list">
+            <field name="name">Master Requisition</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">requisition.master</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="requisition_master_search"/>
+            <field name="domain">[('requisition_type', '=', 'use')]</field>
+            <field name="context">{
+                "default_user_id": uid,
+                }
+            </field>
+        </record>
+
+        <record id="action_batch_requisition_approve" model="ir.actions.server">
+            <field name="name">Approve</field>
+            <field name="model_id" ref="misl_requisition.model_requisition_master"/>
+            <field name="binding_model_id" ref="misl_requisition.model_requisition_master"/>
+            <field name='groups_id' eval="[(4, ref('misl_requisition.misl_requisition_admin'))]"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                action = records.batch_approve()
+            </field>
+        </record>
+
+        <record id="inherit_requisition_views" model="ir.ui.view">
+            <field name="name">inherit.requisition.views</field>
+            <field name="model">requisition.master</field>
+            <field name="inherit_id" ref="misl_requisition.requisition_master_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="%(action_requisition_purchase_list)d"
+                            type="action"
+                            class="oe_stat_button"
+                            style="height: 60px;"
+                            icon="fa-list-alt"
+                            attrs="{'invisible': ['|', ('purchase_requisition_count', '=', 0), ('requisition_type', '!=', 'use')]}">
+                        <div class="o_field_widget o_stat_info">
+                            <field name="purchase_requisition_count" widget="statinfo" nolabel="1"/>
+                            <span class="o_stat_text">Purchase</span>
+                            <span class="o_stat_text">Requisitions</span>
+                        </div>
+                        <!--                        <field name="purchase_requisition_count" widget="statinfo" string="Purchase Requisitions"/>-->
+                    </button>
+
+                    <button name="%(action_requisition_inventory_list)d"
+                            type="action"
+                            class="oe_stat_button"
+                            style="height: 60px;"
+                            icon="fa-list-alt"
+                            attrs="{'invisible': ['|', ('inventory_requisition_count', '=', 0), ('requisition_type', '!=', 'use')]}">
+                        <div class="o_field_widget o_stat_info">
+                            <field name="inventory_requisition_count" widget="statinfo" nolabel="1"/>
+                            <span class="o_stat_text">Inventory</span>
+                            <span class="o_stat_text">Requisitions</span>
+                        </div>
+                        <!--                        <field name="inventory_requisition_count" widget="statinfo" string="Inventory Requisitions"/>-->
+                    </button>
+                    <!--                    <button name="%(action_requisition_master_list)d"-->
+                    <!--                            type="action"-->
+                    <!--                            class="oe_stat_button"-->
+                    <!--                            style="height: 60px;"-->
+                    <!--                            icon="fa-list-alt"-->
+                    <!--                            attrs="{'invisible': [('master_requisition_count', '=', 0)]}">-->
+                    <!--                        <div class="o_field_widget o_stat_info">-->
+                    <!--                            <field name="master_requisition_count" widget="statinfo" nolabel="1"/>-->
+                    <!--                            <span class="o_stat_text">Master</span>-->
+                    <!--                            <span class="o_stat_text">Requisitions</span>-->
+                    <!--                        </div>-->
+                    <!--&lt;!&ndash;                        <field name="manpower_requisition_count" widget="statinfo" string="Manpower Requisitions"/>&ndash;&gt;-->
+                    <!--                    </button>-->
+                </xpath>
+            </field>
+        </record>
+
+        <!--        <record model="ir.actions.act_window" id="action_requisition_budget_list">-->
+        <!--            <field name="name">Requisition Plan</field>-->
+        <!--            <field name="type">ir.actions.act_window</field>-->
+        <!--            <field name="res_model">requisition.master</field>-->
+        <!--            <field name="view_mode">tree,form</field>-->
+        <!--            <field name="search_view_id" ref="requisition_master_search"/>-->
+        <!--            <field name="domain">[('requisition_type', '=', 'budget')]</field>-->
+        <!--            <field name="context">{-->
+        <!--                "default_requisition_type":'budget',-->
+        <!--                "default_user_id": uid,-->
+        <!--                "budget": 1-->
+        <!--                }-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+
+    </data>
+</odoo>

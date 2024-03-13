@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+
+        <record model="ir.module.category" id="module_category_requisition_master_main">
+            <field name="name">Requisition</field>
+            <field name="description">Helps you handle your requisition</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="misl_requisition_user" model="res.groups">
+            <field name="name">Own Requisition</field>
+            <field name="category_id" ref="misl_requisition.module_category_requisition_master_main"/>
+        </record>
+
+        <record id="misl_requisition_supervisor" model="res.groups">
+            <field name="name">Supervisor</field>
+            <field name="category_id" ref="misl_requisition.module_category_requisition_master_main"/>
+            <field name="implied_ids" eval="[(4, ref('misl_requisition_user'))]"/>
+        </record>
+
+        <record id="misl_requisition_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="misl_requisition.module_category_requisition_master_main"/>
+            <field name="implied_ids" eval="[(4, ref('misl_requisition_supervisor'))]"/>
+        </record>
+
+        <record model="ir.module.category" id="module_category_requisition_master">
+            <field name="name">Requisition Types</field>
+            <field name="description">Helps you handle your requisition types</field>
+            <field name="sequence">2</field>
+        </record>
+
+        <record id="misl_requisition_master" model="res.groups">
+            <field name="name">Master Requisition</field>
+            <field name="category_id" ref="misl_requisition.module_category_requisition_master"/>
+        </record>
+      
+        <record id="misl_requisition_purchase" model="res.groups">
+            <field name="name">Purchase Requisition</field>
+            <field name="category_id" ref="misl_requisition.module_category_requisition_master"/>
+        </record>
+
+        <record id="misl_requisition_inventory" model="res.groups">
+            <field name="name">Inventory Requisition</field>
+            <field name="category_id" ref="misl_requisition.module_category_requisition_master"/>
+        </record>
+
+<!--        <record id="misl_requisition_budget" model="res.groups">-->
+<!--            <field name="name">Requisition Budget</field>-->
+<!--            <field name="category_id" ref="misl_requisition.module_category_requisition_master"/>-->
+<!--        </record>-->
+
+        <record id="misl_requisition_all" model="res.groups">
+            <field name="name">All Requisition Types</field>
+            <field name="category_id" ref="misl_requisition.module_category_requisition_master"/>
+            <field name="implied_ids" eval="[(4, ref('misl_requisition_purchase')),
+                                             (4, ref('misl_requisition_master')),
+                                             (4, ref('misl_requisition_inventory'))]"/>
+        </record>
+
+        <record id="misl_requisition_admin" model="res.groups">
+            <field name="name">Requisition Admin</field>
+            <field name="category_id" ref="misl_requisition.module_category_requisition_master_main"/>
+            <field name="implied_ids" eval="[(4, ref('misl_requisition_all')),
+                                             (4, ref('misl_requisition_manager'))]"/>
+        </record>
+
+        <record id="base.group_system" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('misl_requisition_admin'))]"/>
+        </record>
+
+    </data>
+</odoo>

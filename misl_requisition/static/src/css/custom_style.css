@@ -1,0 +1,150 @@
+.smile_ribbon {
+  position: absolute;
+  right: var(--right, 10px);
+  top: var(--top, -3px);
+  filter: drop-shadow(2px 3px 2px rgba(0, 0, 0, 0.5));
+}
+.smile_ribbon > .content {
+  color: white;
+  font-size: 1.25rem;
+  text-align: center;
+  font-weight: 400;
+  background: var(--color, #2ca7d8)
+    linear-gradient(45deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.25) 100%);
+  padding: 8px 2px 4px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 100%, 0 100%);
+  width: var(--width, 32px);
+  min-height: var(--height, 36px);
+  transition: clip-path 1s, padding 1s, background 1s;
+}
+.smile_ribbon.slant-up > .content {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 12px),
+    50% calc(100% - 6px),
+    0 100%
+  );
+}
+.smile_ribbon.slant-down > .content {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    50% calc(100% - 6px),
+    0 calc(100% - 12px)
+  );
+}
+.smile_ribbon.down > .content {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 8px),
+    50% 100%,
+    0 calc(100% - 8px)
+  );
+}
+.smile_ribbon.up > .content {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 8px), 0 100%);
+}
+.smile_ribbon.check > .content {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 20px),
+    40% 100%,
+    0 calc(100% - 12px)
+  );
+}
+.text-bolder {
+  font-weight: bolder;
+}
+.text-bold {
+  font-weight: bold;
+}
+
+.o_form_view .o_form_sheet_bg > .o_form_sheet{
+  max-width: 1550px !important;
+}
+
+
+.signature-blocks hr {
+  width: 160px;
+  box-shadow: none;
+  border: 0;
+  border-bottom: 1px solid #ddd;
+  margin: auto auto 10px;
+}
+
+.signature-blocks img {
+  max-height: 50px;
+}
+
+.ribbon {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  position: absolute;
+}
+.ribbon::before,
+.ribbon::after {
+  position: absolute;
+  z-index: -1;
+  content: '';
+  display: block;
+  border: 5px solid #2980b9;
+}
+.ribbon span {
+  position: absolute;
+  display: block;
+  width: 200px;
+  padding-top: 3px;
+  box-shadow: 0 5px 10px rgba(0,0,0,.1);
+  color: #fff;
+  font: 400 10px/1 'Lato', sans-serif;
+  text-shadow: 0 1px 1px rgba(0,0,0,.2);
+  text-transform: uppercase;
+  text-align: center;
+  height: 15px;
+}
+.ribbon-confirmed {
+  background-color: #eca163;
+}
+.ribbon-draft {
+  background-color: #5DADE2;
+}
+.ribbon-approved {
+  background-color: #2ECC71;
+}
+.ribbon-closed {
+  background-color: #95A5A6;
+}
+
+.ribbon-cancelled {
+  background-color: #FF0000;
+}
+
+.ribbon-top-right {
+  top: 0px;
+  right: 0px;
+  margin-top: 0px;
+}
+.ribbon-top-right::before,
+.ribbon-top-right::after {
+  border-top-color: transparent;
+  border-right-color: transparent;
+}
+.ribbon-top-right::before {
+  top: 0;
+  left: 0;
+}
+.ribbon-top-right::after {
+  bottom: 0;
+  right: 0;
+}
+.ribbon-top-right span {
+  left: -20px;
+  top: 20px;
+  transform: rotate(45deg);
+}
+

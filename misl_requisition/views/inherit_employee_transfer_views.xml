@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="inherit_employee_transfer_form_view" model="ir.ui.view">
+        <field name="name">inherit.employee.transfer.form.view</field>
+        <field name="model">misl.hr.transfer</field>
+        <field name="inherit_id" ref="misl_employee_transfer.view_hr_Transfer_forms"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='requester_id']" position="after">
+                <field name="requisition_id" force_save="1" domain="[('requisition_type', '=', 'recruit')]"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

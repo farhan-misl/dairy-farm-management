@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+
+        <menuitem name="Requisition" id="requisition_main_menu" web_icon="misl_requisition,static/description/icon.png" groups="misl_requisition_user"/>
+
+        <menuitem name="Requisition" id="requisition_sidebar_menu" sequence="20" parent="requisition_main_menu"/>
+<!--        <menuitem name="Plan" id="budget_sidebar_menu" sequence="10" parent="requisition_main_menu" action="action_requisition_budget_list" groups="misl_requisition_budget"/>-->
+        <menuitem name="Configuration" id="config_sidebar_menu" sequence="30" parent="requisition_main_menu" />
+
+
+        <menuitem name="All Requisitions" id="requisition_master_menu" action="action_requisition_master"
+                  sequence='10' parent="requisition_sidebar_menu" groups="misl_requisition_all"/>
+        <menuitem name="Master Requisition" id="requisition_master_type" action="action_requisition_master_type"
+                  sequence="1" parent="requisition_sidebar_menu" groups="misl_requisition_master"/>
+        <menuitem name="Purchase Requisition" id="requisition_purchase_type"
+                  action="action_requisition_purchase_list_menu_action" sequence="2" parent="requisition_sidebar_menu"
+                  groups="misl_requisition_purchase"/>
+        <menuitem name="Inventory Requisition" id="requisition_inventory_type"
+                  action="action_requisition_inventory_list_menu_action" sequence="3"
+                  parent="requisition_sidebar_menu" groups="misl_requisition_inventory"/>
+<!--        <menuitem name="Requisition Lines" id="requisition_line_menu" action="action_requisition_line_product" sequence='20' parent="requisition_sidebar_menu"/>-->
+
+        <menuitem name="Approval Config" id="approval_master_menu" action="action_approval_config" sequence='20'
+                  parent="config_sidebar_menu" groups="misl_requisition_admin"/>
+
+<!--        <menuitem name="Product" id="requisition_product_menu" action="action_requisition_line_product" sequence='20' parent="requisition_line_menu"/>-->
+<!--        <menuitem name="Service" id="requisition_service_menu" action="action_requisition_line_service" sequence='20' parent="requisition_line_menu"/>-->
+<!--        <menuitem name="Manpower" id="requisition_manpower_menu" action="action_manpower_requisition_line" sequence='20' parent="requisition_line_menu"/>-->
+<!--        <menuitem name="Money" id="requisition_money_menu" action="action_money_requisition_line" sequence='30' parent="requisition_line_menu"/>-->
+
+
+        <!-- <menuitem name="Approval Type" id="approval_type_menu" action="action_approval_config" sequence='10' parent="approval_master_menu"/> -->
+        <!-- <menuitem name="Approval Stages" id="approval_stages_menu" action="action_approval_stage" sequence='20' parent="approval_master_menu"/> -->
+
+
+    </data>
+</odoo>

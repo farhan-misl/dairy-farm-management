@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_misl_approval_user,user_approval,misl_approval.model_approval_config,base.group_user,1,0,0,0
+access_misl_approval_hr_admin,hr_admin_approval,misl_approval.model_approval_config,hr.group_hr_manager,1,1,1,1
+access_misl_approval_admin,admin_approval,misl_approval.model_approval_config,base.group_erp_manager,1,1,1,1
+
+access_misl_approval_module_user,user_approval,misl_approval.model_approval_module,base.group_user,1,0,0,0
+access_misl_approval_module_hr_admin,hr_admin_approval,misl_approval.model_approval_module,hr.group_hr_manager,1,1,1,1
+access_misl_approval_module_admin,admin_approval,misl_approval.model_approval_module,base.group_erp_manager,1,1,1,1
+
+access_misl_approval_template_user,user_approval,misl_approval.model_approval_template,base.group_user,1,0,0,0
+access_misl_approval_template_hr_admin,hr_admin_approval,misl_approval.model_approval_template,hr.group_hr_manager,1,1,1,1
+access_misl_approval_template_admin,admin_approval,misl_approval.model_approval_template,base.group_erp_manager,1,1,1,1
+
+access_misl_approval_type_user,admin_approval,misl_approval.model_approval_type,base.group_user,1,0,0,0
+access_misl_approval_type_hr_admin,hr_admin_approval,misl_approval.model_approval_type,hr.group_hr_manager,1,1,1,1
+access_misl_approval_type_admin,admin_approval,misl_approval.model_approval_type,base.group_erp_manager,1,1,1,1

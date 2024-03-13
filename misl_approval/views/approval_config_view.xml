@@ -1,0 +1,120 @@
+<odoo>
+  <data>
+
+    <record id="approval_config_view_tree" model="ir.ui.view">
+      <field name="name">approval.config.view.tree</field>
+      <field name="model">approval.config</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="sequence" widget="handle" />
+          <field name="name" />
+          <field name="approval_module_id" />
+          <field name="approval_type_id" />
+        </tree>
+      </field>
+    </record>
+
+    <record id="approval_config_view_form" model="ir.ui.view">
+      <field name="name">approval.config.view.form</field>
+      <field name="model">approval.config</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <group>
+                <field name="name" string="Name" />
+                <field name="approval_module_id" />
+                <field name="approval_module" invisible="1" />
+                <field name="approval_type" invisible="1" />
+                <field
+                  name="approval_type_id"
+                  domain="[('approval_module_id', '=', approval_module_id)]"
+                />
+              </group>
+              <group>
+                <group>
+                  <field name="is_initial" attrs="{'invisible': [('final_stage', '!=', False)]}" widget="boolean_toggle" />
+                  <field name="final_stage" attrs="{'invisible': [('is_initial', '!=', False)]}"  widget="boolean_toggle" />
+                  <field name="has_employee_id" invisible="1"/>
+                  <field name="supervisor_can_approve" attrs="{'invisible': [('has_employee_id', '=', False)]}"  widget="boolean_toggle" />
+                  <field name="department_head_can_approve" attrs="{'invisible': [('has_employee_id', '=', False)]}"  widget="boolean_toggle"/>
+                </group>
+              </group>
+            </group>
+
+            <group>
+              <field name="approval_template_ids">
+                <tree editable="bottom">
+                  <field name="sequence" widget="handle" />
+                  <field
+                    name="user_ids"
+                    widget="many2many_tags"
+                    options="{'color_field': 'color'}"
+                  />
+                  <field
+                    name="group_ids"
+                    widget="many2many_tags"
+                    options="{'color_field': 'color'}"
+                  />
+                </tree>
+              </field>
+            </group>
+
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="approval_config_search_view" model="ir.ui.view">
+      <field name="name">approval.config.search</field>
+      <field name="model">approval.config</field>
+      <field name="arch" type="xml">
+        <search string="Search Approval Config">
+          <field name="name" />
+          <field name="approval_module_id" />
+          <field name="approval_type_id" />
+          <separator />
+          <group expand="1" string="Group By">
+            <filter
+              string="Approval Type"
+              name="group_by_approval_type_id"
+              domain="[]"
+              context="{'group_by': 'approval_type_id'}"
+            />
+            <filter
+              string="Approval Module"
+              name="group_by_approval_module_id"
+              context="{'group_by': 'approval_module_id'}"
+            />
+          </group>
+        </search>
+      </field>
+    </record>
+
+
+    <record id="action_approval_config" model="ir.actions.act_window">
+      <field name="name">Approval Configuration</field>
+      <field name="res_model">approval.config</field>
+      <field name="view_mode">tree,kanban,form</field>
+    </record>
+
+
+    <!-- Top menu item -->
+    <menuitem
+      name="Approvals"
+      id="misl_approval.menu_root"
+      web_icon="misl_approval,static/description/icon.png"
+      action="action_approval_config"
+      groups="hr.group_hr_user"
+    />
+    <!-- menu categories -->
+    <menuitem
+      name="Approval Config"
+      id="misl_approval.menu_approval_config"
+      parent="misl_approval.menu_root"
+      action="action_approval_config"
+      sequence="30"
+    />
+
+  </data>
+</odoo>

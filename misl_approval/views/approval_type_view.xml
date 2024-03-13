@@ -1,0 +1,51 @@
+<odoo>
+  <data>
+
+    <record id="approval_type_view_tree" model="ir.ui.view">
+      <field name="name">approval.type.view.tree</field>
+      <field name="model">approval.type</field>
+      <field name="arch" type="xml">
+        <tree create="0" delete="0" duplicate="0" edit="0">
+          <field name="name" />
+          <field name="code" />
+          <field name="approval_module_id" />
+          <field name="has_employee_id" widget="boolean_toggle"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="approval_type_view_form" model="ir.ui.view">
+      <field name="name">approval.type.view.form</field>
+      <field name="model">approval.type</field>
+      <field name="arch" type="xml">
+        <form create="0" delete="0" duplicate="0" edit="0">
+          <sheet>
+            <group>
+              <field name="name" />
+              <field name="code" />
+              <field name="approval_module_id" />
+              <field name="has_employee_id" widget="boolean_toggle"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="action_approval_type" model="ir.actions.act_window">
+      <field name="name">Approval Type</field>
+      <field name="res_model">approval.type</field>
+      <field name="view_mode">tree,kanban,form</field>
+    </record>
+
+    <!-- menu categories -->
+    <menuitem
+      name="Approval Type"
+      id="misl_approval.menu_approval_type"
+      parent="misl_approval.menu_root"
+      action="action_approval_type"
+      sequence="30"
+    />
+
+
+  </data>
+</odoo>

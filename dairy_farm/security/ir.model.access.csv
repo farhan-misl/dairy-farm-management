@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dairy_farm_dairy_farm,dairy_farm.dairy_farm,model_dairy_farm_dairy_farm,base.group_user,1,1,1,1
